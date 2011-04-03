@@ -11,11 +11,11 @@ import org.bukkit.event.player.PlayerListener;
 
 public class PixlPlayer extends PlayerListener {
     public class helper {
-	private final int[] supported = { 17, 18, 19, 35, 43, 44, 53, 67 }; //Supported Block ID's
+	private final int[] supported = new int[] { 17, 18, 19, 35, 43, 44, 53, 67 }; //Supported Block ID's
 	public helper() { }
 
 	public boolean Block(Block b) {
-	    for (int i : supported) {
+	    for (int i=0; i < supported.length; i++) {
 		if(ID(b) == supported[i]) { return true; }
 	    }
 	    return false;

@@ -64,7 +64,7 @@ public class PixlCommand implements CommandExecutor {
 		}
 	    } else if(args[0].equalsIgnoreCase("clear")) {
 		if(isPlayer) {
-		    if(plugin.isSet((Player)(cs)) == null) { return true;}
+		    if(plugin.isSet((Player)(cs)) == null) { return true; }
 		    else { plugin.removeValue((Player)(cs)); }
 		}
 	    }
