@@ -30,6 +30,7 @@ public class Pixl extends JavaPlugin {
 
     @Override
     public void onEnable() {
+	
 	pdf = this.getDescription();
 	version = pdf.getVersion();
 	//Set up the Plugin Manager
