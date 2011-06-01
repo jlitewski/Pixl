@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 
 public class PixlCommand implements CommandExecutor {
     private String[] wool = { "white", "orange", "magenta", "lightblue", "yellow", "lightgreen", "pink",
-	    "gray", "lightgray", "cyan", "purple", "blue", "brown", "darkgreen", "red", "black"};
+	    "gray", "lightgray", "cyan", "purple", "blue", "brown", "green", "red", "black"};
     private String name = ChatColor.AQUA+"P"+ChatColor.DARK_AQUA+"i"+ChatColor.BLUE+"x"+ChatColor.DARK_BLUE+"l";
     boolean isPlayer = false;
     boolean isPlayerAdmin = false;
@@ -26,7 +26,7 @@ public class PixlCommand implements CommandExecutor {
 		cs.sendMessage(ChatColor.RED+"You don't have permission to use Pixl");
 		return false;
 	    }
-	} 
+	}
 	if(args.length == 0) {
 	    if(isPlayer) {
 		if(plugin.helpEnabled) {

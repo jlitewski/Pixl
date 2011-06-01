@@ -16,7 +16,6 @@ public class Pixl extends JavaPlugin {
     public HashMap<Player, Boolean> toggled = new HashMap<Player, Boolean>();
     public HashMap<Player, Integer> set = new HashMap<Player, Integer>();
 
-    //private final PixlBlock bListener = new PixlBlock(this);
     private final PixlPlayer pListener = new PixlPlayer(this);
     private final PixlServer pServer = new PixlServer(this);
 
