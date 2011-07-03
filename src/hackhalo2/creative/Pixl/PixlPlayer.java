@@ -11,7 +11,7 @@ import org.bukkit.event.player.PlayerListener;
 
 public class PixlPlayer extends PlayerListener {
     public class helper {
-	private final int[] supported = new int[] { 4, 17, 18, 19, 35, 43, 44, 48, 53, 67, 85 }; //Supported Block ID's
+	private final int[] supported = new int[] { 4, 6, 17, 18, 19, 31, 33, 35, 43, 44, 48, 53, 67, 85 }; //Supported Block ID's
 	public helper() { }
 
 	public boolean Block(Block b) {
@@ -87,6 +87,9 @@ public class PixlPlayer extends PlayerListener {
 	    } else if(a.Type(b) == Material.COBBLESTONE || a.Type(b) == Material.MOSSY_COBBLESTONE) { //Turn Cobble into mossy and back again!
 		if(a.Type(b) == Material.COBBLESTONE) { b.setType(Material.MOSSY_COBBLESTONE); }
 		else if(a.Type(b) == Material.MOSSY_COBBLESTONE) { b.setType(Material.COBBLESTONE); }
+	    } else if(a.Type(b) == Material.LONG_GRASS || a.Type(b) == Material.SAPLING) {
+		if(b.getData() < (byte)(2)) { b.setData((byte)(b.getData()+1)); } //add one
+		else { b.setData((byte)(0)); } //reset it
 	    }
 	    BlockPlaceEvent event2 = new BlockPlaceEvent(b, previousBlock.getState(), previousBlock, p.getItemInHand(), p, true);
 	    plugin.getServer().getPluginManager().callEvent(event2);
