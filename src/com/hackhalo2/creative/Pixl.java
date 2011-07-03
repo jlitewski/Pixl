@@ -1,4 +1,4 @@
-package hackhalo2.creative.Pixl;
+package com.hackhalo2.creative;
 
 import java.util.HashMap;
 

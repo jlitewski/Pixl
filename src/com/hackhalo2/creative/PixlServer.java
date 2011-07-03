@@ -1,4 +1,4 @@
-package hackhalo2.creative.Pixl;
+package com.hackhalo2.creative;
 
 import me.taylorkelly.help.Help;
 import com.nijikokun.bukkit.Permissions.Permissions;
