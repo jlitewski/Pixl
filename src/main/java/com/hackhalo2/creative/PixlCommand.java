@@ -49,7 +49,7 @@ public class PixlCommand implements CommandExecutor {
 			cs.sendMessage(ChatColor.WHITE+"com.hackhalo2.creative."+name);
 			cs.sendMessage(ChatColor.AQUA+"Version: "+plugin.version);
 			cs.sendMessage(ChatColor.GOLD+"Permissions "+(plugin.permissionsEnabled ? ChatColor.GREEN+"Enabled ("+plugin.permissionsType+")" : ChatColor.RED+"Disabled"));
-			cs.sendMessage(ChatColor.GOLD+"Advanced Help "+(plugin.helpEnabled ? ChatColor.GREEN+"Enabled" : ChatColor.RED+"Disabled"));
+			//cs.sendMessage(ChatColor.GOLD+"Advanced Help "+(plugin.helpEnabled ? ChatColor.GREEN+"Enabled" : ChatColor.RED+"Disabled"));
 		    }
 		} else {
 		    cs.sendMessage("com.hackhalo2.creative.Pixl");

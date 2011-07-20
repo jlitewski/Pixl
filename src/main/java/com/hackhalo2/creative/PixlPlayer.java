@@ -67,7 +67,7 @@ public class PixlPlayer extends PlayerListener {
 	    if(event1.isCancelled()) {
 		return;
 	    } else {
-		b.getWorld().dropItemNaturally(b.getLocation(), new ItemStack(b.getTypeId(), 1, 0));
+		b.getWorld().dropItemNaturally(b.getLocation(), new ItemStack(b.getTypeId(), 1, (short)0));
 		b.setType(Material.AIR);
 	    }
 	} else {

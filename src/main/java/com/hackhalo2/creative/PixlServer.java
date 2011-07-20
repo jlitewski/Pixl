@@ -21,15 +21,12 @@ public class PixlServer extends ServerListener {
     @Override
     public void onPluginEnable(PluginEnableEvent e) {
 	Plugin test = plugin.getServer().getPluginManager().getPlugin("Permissions");
-	Plugin test2 = plugin.getServer().getPluginManager().getPlugin("GroupManager");
 	//Plugin test3 = plugin.getServer().getPluginManager().getPlugin("Help");
 	if(plugin.permissionsEnabled == false && test != null) { //Permissions check
 	    permissionsFail = false;
 	    if(Pixl.Permissions == null) {
-		String name;
 
-		if(test2 != null) { name = test2.getDescription().getName()+"/FakePermissions "+test.getDescription().getVersion(); } else { name = test.getDescription().getFullName(); }
-		plugin.permissionsType = name;
+		plugin.permissionsType = test.getDescription().getFullName();
 		Pixl.Permissions = ((Permissions) test).getHandler();
 		System.out.println("[Pixl] Hooking into Permissions");
 		plugin.permissionsEnabled = true;
@@ -61,10 +58,10 @@ public class PixlServer extends ServerListener {
     @Override
     public void onPluginDisable(PluginDisableEvent e) {
 	Plugin test = plugin.getServer().getPluginManager().getPlugin("Permissions");
-	Plugin test2 = plugin.getServer().getPluginManager().getPlugin("Help");
+	//Plugin test2 = plugin.getServer().getPluginManager().getPlugin("Help");
 	String name = e.getPlugin().getDescription().getName();
 
-	if((plugin.permissionsEnabled != false && Pixl.Permissions != null && test != null) || (plugin.helpEnabled != false && test2 != null)) {
+	if((plugin.permissionsEnabled != false && Pixl.Permissions != null && test != null) /*|| (plugin.helpEnabled != false && test2 != null)*/) {
 	    if(name.equals("Permissions")) {
 		System.out.println("[Pixl] Unhooking Permissions");
 		Pixl.Permissions = null;
