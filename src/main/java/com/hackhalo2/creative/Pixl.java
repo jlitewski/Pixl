@@ -69,7 +69,7 @@ public class Pixl extends JavaPlugin {
     }
 
     public boolean checkPermissions(Player p, String s, boolean f) {
-	if(isToggled(p) || f) { //check to see if player is toggled or forced
+	if(isToggled(p) || breakMode(p) || f) { //check to see if player is toggled or forced
 	    if(permissionsEnabled) { return Permissions.has(p, s); }
 	    else if(p.isOp()) { return true; }
 	}
