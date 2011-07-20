@@ -55,7 +55,7 @@ public class PixlCommand implements CommandExecutor {
 		    cs.sendMessage("com.hackhalo2.creative.Pixl");
 		    cs.sendMessage("Version: "+plugin.version);
 		    cs.sendMessage("Permissions "+(plugin.permissionsEnabled ? "Enabled ("+plugin.permissionsType+")" : "Disabled"));
-		    cs.sendMessage("Advanced Help "+(plugin.helpEnabled ? "Enabled" : "Disabled"));
+		    //cs.sendMessage("Advanced Help "+(plugin.helpEnabled ? "Enabled" : "Disabled"));
 		}
 	    } else if(args[0].equalsIgnoreCase("toggle")) {
 		if(isPlayer) {
