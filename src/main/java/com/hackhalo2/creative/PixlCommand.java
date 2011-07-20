@@ -29,15 +29,15 @@ public class PixlCommand implements CommandExecutor {
 	}
 	if(args.length == 0) {
 	    if(isPlayer) {
-		if(plugin.helpEnabled) {
+		/*if(plugin.helpEnabled) {
 		    cs.sendMessage(ChatColor.AQUA+"Please use /help Pixl for commands");
-		} else {
+		} else {*/
 		    cs.sendMessage(name+ChatColor.AQUA+" Version "+plugin.version);
 		    cs.sendMessage(ChatColor.AQUA+"/pixl toggle | "+ChatColor.DARK_AQUA+"Toggles Pixl on/off");
 		    cs.sendMessage(ChatColor.AQUA+"/pixl set <value> | "+ChatColor.DARK_AQUA+"Set wool color to byte <value>");
 		    cs.sendMessage(ChatColor.AQUA+"/pixl clear | "+ChatColor.DARK_AQUA+"Clears the value set by /pixl set");
 		    if(isPlayerAdmin) { cs.sendMessage(ChatColor.AQUA+"/pixl version | "+ChatColor.DARK_AQUA+"Detailed version info"); }
-		}
+		//}
 	    } else {
 		cs.sendMessage("pixl version | Detailed version info");
 		cs.sendMessage("More console commands comming soon!");
@@ -61,6 +61,14 @@ public class PixlCommand implements CommandExecutor {
 		if(isPlayer) {
 		    plugin.setToggle((Player)(cs), (plugin.isToggled((Player)(cs)) ? false : true));
 		    cs.sendMessage(ChatColor.AQUA+"Pixl "+(plugin.isToggled((Player)(cs)) ? "Enabled" : "Disabled"));
+		}
+	    } else if(args[0].equalsIgnoreCase("btoggle")) {
+		//this is currently very fucking dangerous
+		if(isPlayerAdmin) {
+		    plugin.setBreak((Player)(cs), (plugin.breakMode((Player)(cs)) ? false : true));
+		    cs.sendMessage(ChatColor.AQUA+"Pixl Break Mode"+(plugin.breakMode((Player)(cs)) ? "Enabled" : "Disabled"));
+		} else {
+		    cs.sendMessage(ChatColor.RED+"You don't have permission to use this command");
 		}
 	    } else if(args[0].equalsIgnoreCase("clear")) {
 		if(isPlayer) {

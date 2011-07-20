@@ -1,5 +1,6 @@
 package com.hackhalo2.creative;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -8,6 +9,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerListener;
+import org.bukkit.inventory.ItemStack;
 
 public class PixlPlayer extends PlayerListener {
     public class helper {
@@ -25,7 +27,7 @@ public class PixlPlayer extends PlayerListener {
 
 	public int ID(Block b) { return b.getTypeId(); }
     }
-    
+
     private final Object _lock = new Object();
     private final Pixl plugin;
     private final helper a = new helper();
@@ -38,8 +40,13 @@ public class PixlPlayer extends PlayerListener {
     public void onPlayerInteract(PlayerInteractEvent e) {
 	if(e.getAction().toString().equals("RIGHT_CLICK_BLOCK") && a.Block(e.getClickedBlock())) {
 	    synchronized(_lock) {
-		if(plugin.checkPermissions(e.getPlayer(), "pixl.use", false) && e.getPlayer().getItemInHand().getType() == Material.AIR)
-		{ pixlArt(e.getClickedBlock(), e.getPlayer()); }
+		if(e.getPlayer().getItemInHand().getType() == Material.AIR) { //make sure the item in hand is air
+		    if(plugin.checkPermissions(e.getPlayer(), "pixl.admin", false) && plugin.breakMode(e.getPlayer())) {
+			pixlBreak(e.getClickedBlock(), e.getPlayer());
+		    } else if(plugin.checkPermissions(e.getPlayer(), "pixl.use", false) && plugin.isToggled(e.getPlayer())) {
+			pixlArt(e.getClickedBlock(), e.getPlayer());
+		    }
+		}
 	    }
 	}
     }
@@ -50,6 +57,22 @@ public class PixlPlayer extends PlayerListener {
 	//TODO message user that Pixl is enabled/disabled on login
 	if(plugin.isToggled(e.getPlayer())) 
 	{ plugin.setToggle(e.getPlayer(), false); }
+    }
+
+    public void pixlBreak(Block b, Player p) {
+	//Very hackish detection
+	if(b.getType() != Material.BEDROCK) {
+	    BlockBreakEvent event1 = new BlockBreakEvent(b, p);
+	    plugin.getServer().getPluginManager().callEvent(event1);
+	    if(event1.isCancelled()) {
+		return;
+	    } else {
+		b.getWorld().dropItemNaturally(b.getLocation(), new ItemStack(b.getTypeId(), 1, 0));
+		b.setType(Material.AIR);
+	    }
+	} else {
+	    p.sendMessage(ChatColor.RED + "You cannot destroy bedrock with PixlBreak!");
+	}
     }
 
     public void pixlArt(Block b, Player p) {

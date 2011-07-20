@@ -15,6 +15,7 @@ public class Pixl extends JavaPlugin {
     public String version = null;
     public HashMap<Player, Boolean> toggled = new HashMap<Player, Boolean>();
     public HashMap<Player, Integer> set = new HashMap<Player, Integer>();
+    public HashMap<Player, Integer> breakMode = new HashMap<Player, Integer>();
 
     private final PixlPlayer pListener = new PixlPlayer(this);
     private final PixlServer pServer = new PixlServer(this);
@@ -25,7 +26,7 @@ public class Pixl extends JavaPlugin {
     public static PermissionHandler Permissions = null; //for Permissions
     public boolean permissionsEnabled = false; //enabled boolean
     //Help
-    public boolean helpEnabled = false; //enabled boolean
+    //public boolean helpEnabled = false; //enabled boolean
 
     @Override
     public void onEnable() {
@@ -51,6 +52,12 @@ public class Pixl extends JavaPlugin {
     public void setToggle(final Player p, final boolean v) { toggled.put(p, v); }	
     public boolean isToggled(final Player p) {
 	if(toggled.containsKey(p)) { return toggled.get(p); }
+	else { return false; }
+    }
+    
+    public void setBreak(final Player p, final boolean v) { breakMode.put(p, v); }	
+    public boolean breakMode(final Player p) {
+	if(breakMode.containsKey(p)) { return breakMode.get(p); }
 	else { return false; }
     }
 

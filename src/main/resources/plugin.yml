@@ -1,12 +1,13 @@
 name: Pixl
 main: com.hackhalo2.creative.Pixl
-version: 1.7
+version: 1.7.1
 author: HACKhalo2
 commands:
     pixl:
         description: The default command for Pixl
         usage: /<command>
         example: /<command> | Show version info and help
-        example: /<command> toggle | Toggle on/off
+        example: /<command> toggle | Toggle PixlArt on/off
+        example: /<command> btoggle | Toggle PixlBreak on/off
         example: /<command> set <value> | hard-set the byte value
         example: /<command> clear | clear the value set by the set command

@@ -1,17 +1,17 @@
 package com.hackhalo2.creative;
 
-import me.taylorkelly.help.Help;
-import com.nijikokun.bukkit.Permissions.Permissions;
-
+//import me.taylorkelly.help.Help;
 import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.event.server.ServerListener;
 import org.bukkit.plugin.Plugin;
 
+import com.nijikokun.bukkit.Permissions.Permissions;
+
 public class PixlServer extends ServerListener {
 
-    private Pixl plugin;
-    private boolean helpFail = false;
+    private final Pixl plugin;
+    //private boolean helpFail = false;
     private boolean permissionsFail = false;
 
     public PixlServer(final Pixl p) {
@@ -22,7 +22,7 @@ public class PixlServer extends ServerListener {
     public void onPluginEnable(PluginEnableEvent e) {
 	Plugin test = plugin.getServer().getPluginManager().getPlugin("Permissions");
 	Plugin test2 = plugin.getServer().getPluginManager().getPlugin("GroupManager");
-	Plugin test3 = plugin.getServer().getPluginManager().getPlugin("Help");
+	//Plugin test3 = plugin.getServer().getPluginManager().getPlugin("Help");
 	if(plugin.permissionsEnabled == false && test != null) { //Permissions check
 	    permissionsFail = false;
 	    if(Pixl.Permissions == null) {
@@ -41,7 +41,7 @@ public class PixlServer extends ServerListener {
 	    plugin.permissionsEnabled = false;
 	}
 
-	if(plugin.helpEnabled == false && test3 != null) { //Help check
+	/*if(plugin.helpEnabled == false && test3 != null) { //Help check
 	    helpFail = false;
 	    Help helpPlugin = ((Help) test3);
 	    helpPlugin.registerCommand("help Pixl", "Display Pixl's help menu", plugin, true, "pixl.use");
@@ -55,7 +55,7 @@ public class PixlServer extends ServerListener {
 	    helpFail = true;
 	    System.out.println("[Pixl] Help plugin isn't detected, Advanced /help support disabled");
 	    plugin.helpEnabled = false;
-	}
+	}*/
     }
 
     @Override
@@ -69,12 +69,12 @@ public class PixlServer extends ServerListener {
 		System.out.println("[Pixl] Unhooking Permissions");
 		Pixl.Permissions = null;
 		plugin.permissionsEnabled = false;
-		helpFail = false;
-	    } else if(name.equals("Help")) {
+		//helpFail = false;
+	    }/* else if(name.equals("Help")) {
 		System.out.println("[Pixl] Unhooking Help");
 		plugin.helpEnabled = false;
 		helpFail = false;
-	    }
+	    }*/
 	}
     }
 }
