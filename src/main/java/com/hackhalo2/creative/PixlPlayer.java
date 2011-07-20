@@ -38,12 +38,12 @@ public class PixlPlayer extends PlayerListener {
 
     @Override
     public void onPlayerInteract(PlayerInteractEvent e) {
-	if(e.getAction().toString().equals("RIGHT_CLICK_BLOCK") && a.Block(e.getClickedBlock())) {
+	if(e.getAction().toString().equals("RIGHT_CLICK_BLOCK")) {
 	    synchronized(_lock) {
 		if(e.getPlayer().getItemInHand().getType() == Material.AIR) { //make sure the item in hand is air
 		    if(plugin.checkPermissions(e.getPlayer(), "pixl.admin", false) && plugin.breakMode(e.getPlayer())) {
 			pixlBreak(e.getClickedBlock(), e.getPlayer());
-		    } else if(plugin.checkPermissions(e.getPlayer(), "pixl.use", false) && plugin.isToggled(e.getPlayer())) {
+		    } else if(plugin.checkPermissions(e.getPlayer(), "pixl.use", false) && plugin.isToggled(e.getPlayer()) && a.Block(e.getClickedBlock())) {
 			pixlArt(e.getClickedBlock(), e.getPlayer());
 		    }
 		}
@@ -55,8 +55,8 @@ public class PixlPlayer extends PlayerListener {
     public void onPlayerJoin(PlayerJoinEvent e) {
 	//TODO load user settings upon login
 	//TODO message user that Pixl is enabled/disabled on login
-	if(plugin.isToggled(e.getPlayer())) 
-	{ plugin.setToggle(e.getPlayer(), false); }
+	if(plugin.isToggled(e.getPlayer())) { plugin.setToggle(e.getPlayer(), false); }
+	if(plugin.breakMode(e.getPlayer())) { plugin.setBreak(e.getPlayer(), false); }
     }
 
     public void pixlBreak(Block b, Player p) {
@@ -67,7 +67,7 @@ public class PixlPlayer extends PlayerListener {
 	    if(event1.isCancelled()) {
 		return;
 	    } else {
-		b.getWorld().dropItemNaturally(b.getLocation(), new ItemStack(b.getTypeId(), 1, (short)0));
+		b.getWorld().dropItemNaturally(b.getLocation(), new ItemStack(b.getTypeId(), 1, b.getData()));
 		b.setType(Material.AIR);
 	    }
 	} else {
