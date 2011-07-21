@@ -5,6 +5,8 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event.Result;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -40,11 +42,11 @@ public class PixlPlayer extends PlayerListener {
 
     @Override
     public void onPlayerInteract(PlayerInteractEvent e) {
-	if(e.getAction().toString().equals("RIGHT_CLICK_BLOCK")) {
+	if(e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
 	    synchronized(_lock) {
 		if(e.getPlayer().getItemInHand().getType() == Material.AIR) { //make sure the item in hand is air
 		    if(plugin.checkPermissions(e.getPlayer(), "pixl.admin", false) && plugin.breakMode(e.getPlayer())) {
-			e.setCancelled(true); //Hopefully this will fix things
+			e.setUseInteractedBlock(Result.DENY);
 			pixlBreak(e.getClickedBlock(), e.getPlayer());
 		    } else if(plugin.checkPermissions(e.getPlayer(), "pixl.use", false) && plugin.isToggled(e.getPlayer()) && a.Block(e.getClickedBlock())) {
 			pixlArt(e.getClickedBlock(), e.getPlayer());
@@ -70,19 +72,18 @@ public class PixlPlayer extends PlayerListener {
 	    if(event1.isCancelled()) {
 		return;
 	    } else {
+		b.getWorld().dropItemNaturally(b.getLocation(), new ItemStack(b.getTypeId(), 1, b.getData()));
 		if(b.getType() != Material.CHEST || b.getType() != Material.NOTE_BLOCK || 
 			b.getType() != Material.FURNACE || b.getType() != Material.DISPENSER) {
 		    b.setType(Material.AIR);
 		} else {
 		    if(b instanceof BlockState) {
-			
 			((BlockState) b).setData(new MaterialData(Material.AIR));
 		    } else {
 			p.sendMessage(ChatColor.RED + "Ran in a problem that shouldn't of happened!");
 			p.sendMessage(ChatColor.RED + "Block != BlockState!");
 		    }
 		}
-		b.getWorld().dropItemNaturally(b.getLocation(), new ItemStack(b.getTypeId(), 1, b.getData()));
 	    }
 	} else {
 	    p.sendMessage(ChatColor.RED + "You cannot destroy bedrock with PixlBreak!");
