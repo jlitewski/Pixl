@@ -5,7 +5,6 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event.Result;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
@@ -45,11 +44,16 @@ public class PixlPlayer extends PlayerListener {
 	if(e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
 	    synchronized(_lock) {
 		if(e.getPlayer().getItemInHand().getType() == Material.AIR) { //make sure the item in hand is air
-		    if(plugin.checkPermissions(e.getPlayer(), "pixl.admin", false) && plugin.breakMode(e.getPlayer())) {
-			e.setUseInteractedBlock(Result.DENY);
-			pixlBreak(e.getClickedBlock(), e.getPlayer());
-		    } else if(plugin.checkPermissions(e.getPlayer(), "pixl.use", false) && plugin.isToggled(e.getPlayer()) && a.Block(e.getClickedBlock())) {
+		    if(plugin.checkPermissions(e.getPlayer(), "pixl.use", false) && plugin.isToggled(e.getPlayer()) && a.Block(e.getClickedBlock())) {
 			pixlArt(e.getClickedBlock(), e.getPlayer());
+		    }
+		}
+	    }
+	} else if(e.getAction().equals(Action.LEFT_CLICK_BLOCK)) {
+	    synchronized(_lock) {
+		if(e.getPlayer().getItemInHand().getType() == Material.AIR) { //make sure the item in hand is air
+		    if(plugin.checkPermissions(e.getPlayer(), "pixl.admin", false) && plugin.breakMode(e.getPlayer())) {
+			pixlBreak(e.getClickedBlock(), e.getPlayer());
 		    }
 		}
 	    }
