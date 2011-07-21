@@ -44,6 +44,7 @@ public class PixlPlayer extends PlayerListener {
 	    synchronized(_lock) {
 		if(e.getPlayer().getItemInHand().getType() == Material.AIR) { //make sure the item in hand is air
 		    if(plugin.checkPermissions(e.getPlayer(), "pixl.admin", false) && plugin.breakMode(e.getPlayer())) {
+			e.setCancelled(true); //Hopefully this will fix things
 			pixlBreak(e.getClickedBlock(), e.getPlayer());
 		    } else if(plugin.checkPermissions(e.getPlayer(), "pixl.use", false) && plugin.isToggled(e.getPlayer()) && a.Block(e.getClickedBlock())) {
 			pixlArt(e.getClickedBlock(), e.getPlayer());
@@ -74,6 +75,7 @@ public class PixlPlayer extends PlayerListener {
 		    b.setType(Material.AIR);
 		} else {
 		    if(b instanceof BlockState) {
+			
 			((BlockState) b).setData(new MaterialData(Material.AIR));
 		    } else {
 			p.sendMessage(ChatColor.RED + "Ran in a problem that shouldn't of happened!");
