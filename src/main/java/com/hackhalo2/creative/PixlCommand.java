@@ -16,7 +16,6 @@ public class PixlCommand implements CommandExecutor {
 
     public PixlCommand(Pixl p) { this.plugin = p; }
 
-    @Override
     public boolean onCommand(CommandSender cs, Command c, String l, String[] args) {
 	if(cs instanceof Player) { //check to see if the commandsender is a player and has the correct permissions
 	    if(plugin.checkPermissions((Player)(cs), "pixl.use", true)) {

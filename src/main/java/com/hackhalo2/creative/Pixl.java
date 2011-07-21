@@ -28,7 +28,6 @@ public class Pixl extends JavaPlugin {
     //Help
     //public boolean helpEnabled = false; //enabled boolean
 
-    @Override
     public void onEnable() {
 	
 	pdf = this.getDescription();
@@ -46,7 +45,6 @@ public class Pixl extends JavaPlugin {
 	getCommand("pixl").setExecutor(new PixlCommand(this));
     }
 
-    @Override
     public void onDisable() { }
 
     public void setToggle(final Player p, final boolean v) { toggled.put(p, v); }	

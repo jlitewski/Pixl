@@ -3,6 +3,7 @@ package com.hackhalo2.creative;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
@@ -10,6 +11,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerListener;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.material.MaterialData;
 
 public class PixlPlayer extends PlayerListener {
     public class helper {
@@ -67,8 +69,18 @@ public class PixlPlayer extends PlayerListener {
 	    if(event1.isCancelled()) {
 		return;
 	    } else {
+		if(b.getType() != Material.CHEST || b.getType() != Material.NOTE_BLOCK || 
+			b.getType() != Material.FURNACE || b.getType() != Material.DISPENSER) {
+		    b.setType(Material.AIR);
+		} else {
+		    if(b instanceof BlockState) {
+			((BlockState) b).setData(new MaterialData(Material.AIR));
+		    } else {
+			p.sendMessage(ChatColor.RED + "Ran in a problem that shouldn't of happened!");
+			p.sendMessage(ChatColor.RED + "Block != BlockState!");
+		    }
+		}
 		b.getWorld().dropItemNaturally(b.getLocation(), new ItemStack(b.getTypeId(), 1, b.getData()));
-		b.setType(Material.AIR);
 	    }
 	} else {
 	    p.sendMessage(ChatColor.RED + "You cannot destroy bedrock with PixlBreak!");
