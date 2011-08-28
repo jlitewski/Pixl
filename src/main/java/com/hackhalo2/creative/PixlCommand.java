@@ -11,6 +11,7 @@ public class PixlCommand implements CommandExecutor {
 	    "gray", "lightgray", "cyan", "purple", "blue", "brown", "green", "red", "black"};
     private final String name = ChatColor.AQUA+"P"+ChatColor.DARK_AQUA+"i"+ChatColor.BLUE+"x"+ChatColor.DARK_BLUE+"l";
     boolean isPlayer = false;
+    boolean isPlayerSpecial = false;
     boolean isPlayerAdmin = false;
     private final Pixl plugin;
 
@@ -20,6 +21,7 @@ public class PixlCommand implements CommandExecutor {
 	if(cs instanceof Player) { //check to see if the commandsender is a player and has the correct permissions
 	    if(plugin.checkPermissions((Player)(cs), "pixl.use", true)) {
 		if(plugin.checkPermissions((Player)(cs), "pixl.admin", true)) { isPlayerAdmin = true; }
+		if(plugin.checkPermissions((Player)(cs), "pixl.builder", true)) { isPlayerSpecial = true; }
 		isPlayer = true;
 	    } else {
 		cs.sendMessage(ChatColor.RED+"You don't have permission to use Pixl");
@@ -66,7 +68,7 @@ public class PixlCommand implements CommandExecutor {
 		}
 	    } else if(args[0].equalsIgnoreCase("break")) {
 		//this is currently very fucking dangerous
-		if(isPlayerAdmin) {
+		if(isPlayerAdmin || isPlayerSpecial) {
 		    if(plugin.isToggled((Player)(cs))) { plugin.setToggle((Player)(cs), false); }
 		    plugin.setBreak((Player)(cs), (plugin.breakMode((Player)(cs)) ? false : true));
 		    cs.sendMessage(ChatColor.AQUA+"Pixl Break Mode"+(plugin.breakMode((Player)(cs)) ? "Enabled" : "Disabled"));

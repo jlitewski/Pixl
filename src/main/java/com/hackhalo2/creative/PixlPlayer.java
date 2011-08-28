@@ -37,7 +37,14 @@ public class PixlPlayer extends PlayerListener {
 
     public PixlPlayer(Pixl p) { this.plugin = p; }
 
-
+    public boolean isPickaxe(Material m) {
+	if(m.equals(Material.WOOD_PICKAXE) || m.equals(Material.STONE_PICKAXE) || m.equals(Material.IRON_PICKAXE) ||
+		m.equals(Material.GOLD_PICKAXE) || m.equals(Material.DIAMOND_PICKAXE)) {
+	    return true;
+	} else {
+	    return false;
+	}
+    }
 
     @Override
     public void onPlayerInteract(PlayerInteractEvent e) {
@@ -51,9 +58,11 @@ public class PixlPlayer extends PlayerListener {
 	    }
 	} else if(e.getAction().equals(Action.LEFT_CLICK_BLOCK)) {
 	    synchronized(_lock) {
-		if(e.getPlayer().getItemInHand().getType() == Material.AIR) { //make sure the item in hand is air
+		if(this.isPickaxe(e.getPlayer().getItemInHand().getType())) { //make sure the item in hand is a pickaxe
 		    if(plugin.checkPermissions(e.getPlayer(), "pixl.admin", false) && plugin.breakMode(e.getPlayer())) {
 			pixlBreak(e.getClickedBlock(), e.getPlayer());
+		    } else if(plugin.checkPermissions(e.getPlayer(), "pixl.builder", false) && plugin.breakMode(e.getPlayer())) {
+			pixlHelp(e.getClickedBlock(), e.getPlayer());
 		    }
 		}
 	    }
@@ -66,6 +75,22 @@ public class PixlPlayer extends PlayerListener {
 	//TODO message user that Pixl is enabled/disabled on login
 	if(plugin.isToggled(e.getPlayer())) { plugin.setToggle(e.getPlayer(), false); }
 	if(plugin.breakMode(e.getPlayer())) { plugin.setBreak(e.getPlayer(), false); }
+    }
+    
+    public void pixlHelp(Block b, Player p) {
+	if(b.getType() != Material.BEDROCK) {
+	    BlockBreakEvent event1 = new BlockBreakEvent(b, p);
+	    plugin.getServer().getPluginManager().callEvent(event1);
+	    Material m = b.getType();
+	    if(event1.isCancelled()) {
+		return;
+	    } else if(m.equals(Material.OBSIDIAN) || m.equals(Material.WOOD_STAIRS) || m.equals(Material.COBBLESTONE_STAIRS) ||
+		    m.equals(Material.FENCE) || m.equals(Material.COAL_ORE) || m.equals(Material.IRON_ORE) || m.equals(Material.GOLD_ORE) ||
+		    m.equals(Material.DIAMOND_ORE) || m.equals(Material.LAPIS_ORE) || m.equals(Material.WEB) || m.equals(Material.BRICK)) {
+		b.getWorld().dropItemNaturally(b.getLocation(), new ItemStack(b.getTypeId(), 1, b.getData()));
+		b.setType(Material.AIR);
+	    }
+	}
     }
 
     public void pixlBreak(Block b, Player p) {
