@@ -29,48 +29,48 @@ public class Pixl extends JavaPlugin {
     //public boolean helpEnabled = false; //enabled boolean
 
     public void onEnable() {
-	
-	pdf = this.getDescription();
-	version = pdf.getVersion();
-	//Set up the Plugin Manager
-	PluginManager pm = getServer().getPluginManager();
-	//Register Listeners
-	pm.registerEvent(Event.Type.PLUGIN_ENABLE, pServer, Event.Priority.Lowest, this);
-	pm.registerEvent(Event.Type.PLUGIN_DISABLE, pServer, Event.Priority.Lowest, this);
-	pm.registerEvent(Event.Type.PLAYER_JOIN, pListener, Event.Priority.Normal, this);
-	pm.registerEvent(Event.Type.PLAYER_KICK, pListener, Event.Priority.Normal, this);
-	pm.registerEvent(Event.Type.PLAYER_INTERACT, pListener, Event.Priority.Normal, this);
-	System.out.println("[Pixl] "+version+" Loaded");
 
-	getCommand("pixl").setExecutor(new PixlCommand(this));
+        pdf = this.getDescription();
+        version = pdf.getVersion();
+        //Set up the Plugin Manager
+        PluginManager pm = getServer().getPluginManager();
+        //Register Listeners
+        pm.registerEvent(Event.Type.PLUGIN_ENABLE, pServer, Event.Priority.Lowest, this);
+        pm.registerEvent(Event.Type.PLUGIN_DISABLE, pServer, Event.Priority.Lowest, this);
+        pm.registerEvent(Event.Type.PLAYER_JOIN, pListener, Event.Priority.Normal, this);
+        pm.registerEvent(Event.Type.PLAYER_KICK, pListener, Event.Priority.Normal, this);
+        pm.registerEvent(Event.Type.PLAYER_INTERACT, pListener, Event.Priority.Normal, this);
+        System.out.println("[Pixl] "+version+" Loaded");
+
+        getCommand("pixl").setExecutor(new PixlCommand(this));
     }
 
     public void onDisable() { }
 
-    public void setToggle(final Player p, final boolean v) { toggled.put(p, v); }	
+    public void setToggle(final Player p, final boolean v) { toggled.put(p, v); }
     public boolean isToggled(final Player p) {
-	if(toggled.containsKey(p)) { return toggled.get(p); }
-	else { return false; }
+        if(toggled.containsKey(p)) { return toggled.get(p); }
+        else { return false; }
     }
-    
-    public void setBreak(final Player p, final boolean v) { breakMode.put(p, v); }	
+
+    public void setBreak(final Player p, final boolean v) { breakMode.put(p, v); }
     public boolean breakMode(final Player p) {
-	if(breakMode.containsKey(p)) { return breakMode.get(p); }
-	else { return false; }
+        if(breakMode.containsKey(p)) { return breakMode.get(p); }
+        else { return false; }
     }
 
     public void removeValue(final Player p) { set.remove(p); }
     public void setValue(final Player p, final int v) { set.put(p, v); }
     public Integer isSet(final Player p) {
-	if(set.containsKey(p)) { return set.get(p); }
-	else { return null; }
+        if(set.containsKey(p)) { return set.get(p); }
+        else { return null; }
     }
 
     public boolean checkPermissions(Player p, String s, boolean f) {
-	if(isToggled(p) || breakMode(p) || f) { //check to see if player is toggled or forced
-	    if(permissionsEnabled) { return Permissions.has(p, s); }
-	    else if(p.isOp()) { return true; }
-	}
-	return false;
+        if(isToggled(p) || breakMode(p) || f) { //check to see if player is toggled or forced
+            if(permissionsEnabled) { return Permissions.has(p, s); }
+            else if(p.isOp()) { return true; }
+        }
+        return false;
     }
 }
