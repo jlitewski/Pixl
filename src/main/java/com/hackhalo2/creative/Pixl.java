@@ -2,6 +2,7 @@ package com.hackhalo2.creative;
 
 import java.util.HashMap;
 
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -16,6 +17,26 @@ public class Pixl extends JavaPlugin {
     public HashMap<Player, Boolean> breakMode = new HashMap<Player, Boolean>();
 
     private final PixlPlayer pListener = new PixlPlayer(this);
+    private final PixlBlock bListener = new PixlBlock(this);
+
+    // The list of materials that can be PixlBroken by limited PixlBreak users.
+    public final Material[] limitedUserMaterials = {
+         // Stairs
+         Material.WOOD_STAIRS, Material.COBBLESTONE_STAIRS,
+
+         // Ores
+         Material.COAL_ORE, Material.IRON_ORE, Material.GOLD_ORE,
+         Material.DIAMOND_ORE, Material.LAPIS_ORE,
+
+         // Other hard-to-break stuff.
+         Material.OBSIDIAN, Material.WEB, Material.BRICK, Material.FENCE
+    };
+
+    // The list of materials that count as pickaxes for PixlBreak.
+    public final Material[] pickaxeMaterials = {
+        Material.WOOD_PICKAXE, Material.STONE_PICKAXE, Material.IRON_PICKAXE,
+        Material.GOLD_PICKAXE, Material.DIAMOND_PICKAXE
+    };
 
     //Help
     //public boolean helpEnabled = false; //enabled boolean
@@ -30,6 +51,7 @@ public class Pixl extends JavaPlugin {
         pm.registerEvent(Event.Type.PLAYER_JOIN, pListener, Event.Priority.Normal, this);
         pm.registerEvent(Event.Type.PLAYER_KICK, pListener, Event.Priority.Normal, this);
         pm.registerEvent(Event.Type.PLAYER_INTERACT, pListener, Event.Priority.Normal, this);
+        pm.registerEvent(Event.Type.BLOCK_DAMAGE, bListener, Event.Priority.Normal, this);
         System.out.println("[Pixl] "+version+" Loaded");
 
         getCommand("pixl").setExecutor(new PixlCommand(this));
@@ -60,6 +82,16 @@ public class Pixl extends JavaPlugin {
         if(isToggled(p) || breakMode(p) || f) { //check to see if player is toggled or forced
             return p.hasPermission(s);
         }
+        return false;
+    }
+
+    public boolean isPickaxe(Material material) {
+        for (Material pick : pickaxeMaterials) {
+            if (pick.equals(material)) {
+                return true;
+            }
+        }
+
         return false;
     }
 }

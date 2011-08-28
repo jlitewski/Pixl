@@ -5,9 +5,27 @@ author: HACKhalo2
 commands:
     pixl:
         description: The default command for Pixl
-        usage: /<command>
+        usage: "I don't understand that.  Try '/pixl help'."
+        permission: pixl.command
         example: /<command> | Toggle PixlArt on/off
         example: /<command> help | Help Menu
         example: /<command> break | Toggle PixlBreak on/off
         example: /<command> set <value> | hard-set the byte value
         example: /<command> clear | clear the value set by the set command
+permissions:
+    pixl.*:
+        description: Allows the player to use all Pixl features.
+        default: op
+        children:
+            pixl.command: true
+            pixl.toggle: true
+            pixl.break: true
+            pixl.break.limited: false
+    pixl.command:
+        description: Allows the player to see the /pixl command.
+    pixl.toggle:
+        description: Allows the player to use PixlToggle.
+    pixl.break:
+        description: Allows the player to use PixlBreak.
+    pixl.break.limited:
+        description: Restricts the player's use of PixkBreak to hard-to-break materials like obsidian.

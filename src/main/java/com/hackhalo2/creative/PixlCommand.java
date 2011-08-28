@@ -9,97 +9,141 @@ import org.bukkit.entity.Player;
 public class PixlCommand implements CommandExecutor {
     private final String[] wool = { "white", "orange", "magenta", "lightblue", "yellow", "lightgreen", "pink",
             "gray", "lightgray", "cyan", "purple", "blue", "brown", "green", "red", "black"};
-    private final String name = ChatColor.AQUA+"P"+ChatColor.DARK_AQUA+"i"+ChatColor.BLUE+"x"+ChatColor.DARK_BLUE+"l";
-    boolean isPlayer = false;
-    boolean isPlayerSpecial = false;
-    boolean isPlayerAdmin = false;
+    private final String name = ChatColor.AQUA + "P" + ChatColor.DARK_AQUA + "i" + ChatColor.BLUE + "x" + ChatColor.DARK_BLUE + "l";
     private final Pixl plugin;
 
-    public PixlCommand(Pixl p) { this.plugin = p; }
+    public PixlCommand(Pixl p) {
+        this.plugin = p;
+    }
+
+    public void sendVersionInfo(CommandSender cs) {
+        cs.sendMessage(name + ChatColor.AQUA + " Version " + plugin.version);
+    }
+
+    public void togglePixl(Player player) {
+        if (!player.hasPermission("pixl.toggle")) {
+            player.sendMessage(ChatColor.RED + "You do not have permission to "
+                               + "use this command.");
+            return;
+        }
+
+        plugin.setToggle(player, !plugin.isToggled(player));
+        player.sendMessage(ChatColor.AQUA + "PixlToggle " + 
+                           (plugin.isToggled(player) ? "Enabled" : "Disabled"));
+    }
 
     public boolean onCommand(CommandSender cs, Command c, String l, String[] args) {
-        if(cs instanceof Player) { //check to see if the commandsender is a player and has the correct permissions
-            if(plugin.checkPermissions((Player)(cs), "pixl.use", true)) {
-                if(plugin.checkPermissions((Player)(cs), "pixl.admin", true)) { isPlayerAdmin = true; }
-                if(plugin.checkPermissions((Player)(cs), "pixl.builder", true)) { isPlayerSpecial = true; }
-                isPlayer = true;
-            } else {
-                cs.sendMessage(ChatColor.RED+"You don't have permission to use Pixl");
-                return false;
-            }
+        if (!cs.hasPermission("pixl.command")) {
+            cs.sendMessage(ChatColor.RED + "You do not have permission to use "
+                           + "this command.");
+            return true;
         }
-        if(args.length == 0) {
-            if(isPlayer) {
-                if(plugin.breakMode((Player)(cs))) { plugin.setBreak((Player)(cs), false); }
-                plugin.setToggle((Player)(cs), (plugin.isToggled((Player)(cs)) ? false : true));
-                cs.sendMessage(ChatColor.AQUA+"Pixl "+(plugin.isToggled((Player)(cs)) ? "Enabled" : "Disabled"));
+
+        Player player;
+        if (cs instanceof Player) {
+            player = (Player) cs;
+        } else {
+            // The console can get version info, but can't use Pixl, since it
+            // requires a presence in world.
+            sendVersionInfo(cs);
+            return true;
+        }
+
+        if (args.length == 0) {
+            togglePixl(player);
+            return true;
+        } else if (args.length == 1) {
+            if (args[0].equalsIgnoreCase("version")) {
+                sendVersionInfo(player);
+                return true;
+            } else if (args[0].equalsIgnoreCase("toggle")) {
+                togglePixl(player);
+                return true;
+            } else if (args[0].equalsIgnoreCase("help")) {
+                sendVersionInfo(player);
+                cs.sendMessage(ChatColor.AQUA + "/pixl help | "
+                               + ChatColor.DARK_AQUA + "Displays this menu");
+                cs.sendMessage(ChatColor.AQUA + "/pixl | " + ChatColor.DARK_AQUA
+                               + "Toggles Pixl on/off");
+                cs.sendMessage(ChatColor.AQUA + "/pixl set <value> | "
+                               + ChatColor.DARK_AQUA
+                               + "Set wool color to <value>");
+                cs.sendMessage(ChatColor.AQUA + "/pixl clear | "
+                               + ChatColor.DARK_AQUA
+                               + "Clears the value set by /pixl set");
+                cs.sendMessage(ChatColor.AQUA + "/pixl break | "
+                               + ChatColor.DARK_AQUA
+                               + "Toggles PixlBreak on/off");
+                return true;
+            } else if (args[0].equalsIgnoreCase("break")) {
+                if (!player.hasPermission("pixl.break")) {
+                    cs.sendMessage(ChatColor.RED + "You do not have permission "
+                                   + "to use this command.");
+                    return true;
+                }
+
+                plugin.setBreak(player,
+                                (plugin.breakMode(player) ? false : true));
+                cs.sendMessage(ChatColor.AQUA + "PixlBreak "
+                               + (plugin.breakMode(player)
+                                               ? "Enabled" : "Disabled"));
+                return true;
+            } else if (args[0].equalsIgnoreCase("clear")) {
+                if (!player.hasPermission("pixl.toggle")) {
+                    cs.sendMessage(ChatColor.RED + "You do not have permission "
+                                   + "to use this command.");
+                    return true;
+                }
+
+                if (plugin.isSet(player) != null) {
+                    plugin.removeValue(player);
+                    player.sendMessage(ChatColor.AQUA
+                                       + "Hard value cleared.");
+                } else {
+                    player.sendMessage(ChatColor.AQUA
+                                       + "You do not have a hard value set.");
+                }
+
+                return true;
             }
-        } else if(args.length == 1) {
-            if(args[0].equalsIgnoreCase("version")) {
-                if(isPlayer) {
-                    if(isPlayerAdmin) {
-                        cs.sendMessage(ChatColor.WHITE+"com.hackhalo2.creative."+name);
-                        cs.sendMessage(ChatColor.AQUA+"Version: "+plugin.version);
-                        //cs.sendMessage(ChatColor.GOLD+"Advanced Help "+(plugin.helpEnabled ? ChatColor.GREEN+"Enabled" : ChatColor.RED+"Disabled"));
-                    }
-                } else {
-                    cs.sendMessage("com.hackhalo2.creative.Pixl");
-                    cs.sendMessage("Version: "+plugin.version);
-                    //cs.sendMessage("Advanced Help "+(plugin.helpEnabled ? "Enabled" : "Disabled"));
+        } else if (args.length == 2) {
+            if (args[0].equalsIgnoreCase("set")) {
+                if (!player.hasPermission("pixl.toggle")) {
+                    cs.sendMessage(ChatColor.RED + "You do not have permission "
+                                   + "to use this command.");
+                    return true;
                 }
-            } else if(args[0].equalsIgnoreCase("help")) {
-                if(isPlayer) {
-                    /*if(plugin.helpEnabled) {
-                    cs.sendMessage(ChatColor.AQUA+"Please use /help Pixl for commands");
-                } else {*/
-                    cs.sendMessage(name+ChatColor.AQUA+" Version "+plugin.version);
-                    cs.sendMessage(ChatColor.AQUA+"/pixl | "+ChatColor.DARK_AQUA+"Toggles Pixl on/off");
-                    cs.sendMessage(ChatColor.AQUA+"/pixl set <value> | "+ChatColor.DARK_AQUA+"Set wool color to byte <value>");
-                    cs.sendMessage(ChatColor.AQUA+"/pixl clear | "+ChatColor.DARK_AQUA+"Clears the value set by /pixl set");
-                    cs.sendMessage(ChatColor.AQUA+"/pixl help | "+ChatColor.DARK_AQUA+"Displays this menu");
-                    if(isPlayerAdmin) { cs.sendMessage(ChatColor.AQUA+"/pixl version | "+ChatColor.DARK_AQUA+"Detailed version info"); }
-                    if(isPlayerAdmin) { cs.sendMessage(ChatColor.AQUA+"/pixl break | "+ChatColor.DARK_AQUA+"Toggles PixlBreak on/off"); }
-                    //}
-                } else {
-                    cs.sendMessage("pixl version | Detailed version info");
-                    cs.sendMessage("More console commands comming soon!");
-                }
-            } else if(args[0].equalsIgnoreCase("break")) {
-                //this is currently very fucking dangerous
-                if(isPlayerAdmin || isPlayerSpecial) {
-                    if(plugin.isToggled((Player)(cs))) { plugin.setToggle((Player)(cs), false); }
-                    plugin.setBreak((Player)(cs), (plugin.breakMode((Player)(cs)) ? false : true));
-                    cs.sendMessage(ChatColor.AQUA+"Pixl Break Mode"+(plugin.breakMode((Player)(cs)) ? "Enabled" : "Disabled"));
-                } else {
-                    cs.sendMessage(ChatColor.RED+"You don't have permission to use this command");
-                }
-            } else if(args[0].equalsIgnoreCase("clear")) {
-                if(isPlayer) {
-                    if(plugin.isSet((Player)(cs)) == null) { return true; }
-                    else { plugin.removeValue((Player)(cs)); }
-                }
-            }
-        } else if(args.length == 2) {
-            if(args[0].equalsIgnoreCase("set")) {
+
                 try {
-                    int i = Integer.parseInt(args[1].trim());
-                    if(i > 16) { i = 15; } if(i < 0) { i = 0; }
-                    plugin.setValue((Player)(cs), i);
-                    cs.sendMessage(ChatColor.AQUA+"Hard value set to "+wool[i]);
+                    int raw_value = Integer.parseInt(args[1].trim());
+                    int value = Math.max(0,  Math.min(15, raw_value));
+                    plugin.setValue(player, value);
+                    cs.sendMessage(ChatColor.AQUA + "Hard value set to "
+                                   + wool[value] + ".");
+                    return true;
                 } catch(NumberFormatException e) {
-                    for(int i=0; i < wool.length; i++) {
-                        if(args[1].equalsIgnoreCase(wool[i])) {
-                            plugin.setValue((Player)(cs), i);
-                            cs.sendMessage(ChatColor.AQUA+"Hard value set to "+wool[i]);
+                    String names = "";
+                    String sep = "";
+                    for (int i=0; i < wool.length; i++) {
+                        if (args[1].equalsIgnoreCase(wool[i])) {
+                            plugin.setValue(player, i);
+                            cs.sendMessage(ChatColor.AQUA + "Hard value set to "
+                                           + wool[i] + ".");
                             return true;
                         }
+
+                        names += sep + wool[i];
+                        sep = ", ";
                     }
-                    cs.sendMessage(ChatColor.RED+"Error with Parsing!");
-                    cs.sendMessage(ChatColor.RED+"Please use numbers or the name of the color.");
-                    cs.sendMessage(ChatColor.RED+"Examples: 14 (for red), magenta or lightblue");
+                    cs.sendMessage(ChatColor.RED + "I don't know that color.");
+                    cs.sendMessage(ChatColor.AQUA + "Valid color names:");
+                    cs.sendMessage(ChatColor.AQUA + names);
+                    cs.sendMessage(ChatColor.AQUA + "(You can also specify the "
+                                   + "color's data value, if you know it.)");
+                    return true;
                 }
             }
         }
-        return true;
+        return false;
     }
 }
