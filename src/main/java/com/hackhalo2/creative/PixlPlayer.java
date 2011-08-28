@@ -31,7 +31,6 @@ public class PixlPlayer extends PlayerListener {
         public int ID(Block b) { return b.getTypeId(); }
     }
 
-    private final Object _lock = new Object();
     private final Pixl plugin;
     private final helper a = new helper();
 
@@ -49,21 +48,17 @@ public class PixlPlayer extends PlayerListener {
     @Override
     public void onPlayerInteract(PlayerInteractEvent e) {
         if(e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
-            synchronized(_lock) {
-                if(e.getPlayer().getItemInHand().getType() == Material.AIR) { //make sure the item in hand is air
-                    if(plugin.checkPermissions(e.getPlayer(), "pixl.use", false) && plugin.isToggled(e.getPlayer()) && a.Block(e.getClickedBlock())) {
-                        pixlArt(e.getClickedBlock(), e.getPlayer());
-                    }
+            if(e.getPlayer().getItemInHand().getType() == Material.AIR) { //make sure the item in hand is air
+                if(plugin.checkPermissions(e.getPlayer(), "pixl.use", false) && plugin.isToggled(e.getPlayer()) && a.Block(e.getClickedBlock())) {
+                    pixlArt(e.getClickedBlock(), e.getPlayer());
                 }
             }
         } else if(e.getAction().equals(Action.LEFT_CLICK_BLOCK)) {
-            synchronized(_lock) {
-                if(this.isPickaxe(e.getPlayer().getItemInHand().getType())) { //make sure the item in hand is a pickaxe
-                    if(plugin.checkPermissions(e.getPlayer(), "pixl.admin", false) && plugin.breakMode(e.getPlayer())) {
-                        pixlBreak(e.getClickedBlock(), e.getPlayer());
-                    } else if(plugin.checkPermissions(e.getPlayer(), "pixl.builder", false) && plugin.breakMode(e.getPlayer())) {
-                        pixlHelp(e.getClickedBlock(), e.getPlayer());
-                    }
+            if(this.isPickaxe(e.getPlayer().getItemInHand().getType())) { //make sure the item in hand is a pickaxe
+                if(plugin.checkPermissions(e.getPlayer(), "pixl.admin", false) && plugin.breakMode(e.getPlayer())) {
+                    pixlBreak(e.getClickedBlock(), e.getPlayer());
+                } else if(plugin.checkPermissions(e.getPlayer(), "pixl.builder", false) && plugin.breakMode(e.getPlayer())) {
+                    pixlHelp(e.getClickedBlock(), e.getPlayer());
                 }
             }
         }
