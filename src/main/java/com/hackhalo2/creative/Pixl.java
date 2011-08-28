@@ -8,8 +8,6 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.nijiko.permissions.PermissionHandler;
-
 public class Pixl extends JavaPlugin {
     public PluginDescriptionFile pdf;
     public String version = null;
@@ -18,13 +16,7 @@ public class Pixl extends JavaPlugin {
     public HashMap<Player, Boolean> breakMode = new HashMap<Player, Boolean>();
 
     private final PixlPlayer pListener = new PixlPlayer(this);
-    private final PixlServer pServer = new PixlServer(this);
 
-    //Hook Handling
-    //Permissions
-    public String permissionsType; //name of the hooked Permissions plugin
-    public static PermissionHandler Permissions = null; //for Permissions
-    public boolean permissionsEnabled = false; //enabled boolean
     //Help
     //public boolean helpEnabled = false; //enabled boolean
 
@@ -35,8 +27,6 @@ public class Pixl extends JavaPlugin {
         //Set up the Plugin Manager
         PluginManager pm = getServer().getPluginManager();
         //Register Listeners
-        pm.registerEvent(Event.Type.PLUGIN_ENABLE, pServer, Event.Priority.Lowest, this);
-        pm.registerEvent(Event.Type.PLUGIN_DISABLE, pServer, Event.Priority.Lowest, this);
         pm.registerEvent(Event.Type.PLAYER_JOIN, pListener, Event.Priority.Normal, this);
         pm.registerEvent(Event.Type.PLAYER_KICK, pListener, Event.Priority.Normal, this);
         pm.registerEvent(Event.Type.PLAYER_INTERACT, pListener, Event.Priority.Normal, this);
@@ -68,8 +58,7 @@ public class Pixl extends JavaPlugin {
 
     public boolean checkPermissions(Player p, String s, boolean f) {
         if(isToggled(p) || breakMode(p) || f) { //check to see if player is toggled or forced
-            if(permissionsEnabled) { return Permissions.has(p, s); }
-            else if(p.isOp()) { return true; }
+            return p.hasPermission(s);
         }
         return false;
     }

@@ -40,13 +40,11 @@ public class PixlCommand implements CommandExecutor {
                     if(isPlayerAdmin) {
                         cs.sendMessage(ChatColor.WHITE+"com.hackhalo2.creative."+name);
                         cs.sendMessage(ChatColor.AQUA+"Version: "+plugin.version);
-                        cs.sendMessage(ChatColor.GOLD+"Permissions "+(plugin.permissionsEnabled ? ChatColor.GREEN+"Enabled ("+plugin.permissionsType+")" : ChatColor.RED+"Disabled"));
                         //cs.sendMessage(ChatColor.GOLD+"Advanced Help "+(plugin.helpEnabled ? ChatColor.GREEN+"Enabled" : ChatColor.RED+"Disabled"));
                     }
                 } else {
                     cs.sendMessage("com.hackhalo2.creative.Pixl");
                     cs.sendMessage("Version: "+plugin.version);
-                    cs.sendMessage("Permissions "+(plugin.permissionsEnabled ? "Enabled ("+plugin.permissionsType+")" : "Disabled"));
                     //cs.sendMessage("Advanced Help "+(plugin.helpEnabled ? "Enabled" : "Disabled"));
                 }
             } else if(args[0].equalsIgnoreCase("help")) {

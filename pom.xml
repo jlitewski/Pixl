@@ -9,11 +9,5 @@
   		<artifactId>bukkit</artifactId>
   		<version>0.0.1-SNAPSHOT</version>
   	</dependency>
-  	<dependency>
-  		<groupId>com.nijikokun.bukkit</groupId>
-  		<artifactId>Permissions</artifactId>
-  		<version>[3.1.2,)</version>
-  		<type>jar</type>
-  	</dependency>
   </dependencies>
 </project>
