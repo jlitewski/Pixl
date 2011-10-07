@@ -99,7 +99,7 @@ public class PixlCommand implements CommandExecutor {
                     return true;
                 }
 
-                plugin.setBreak(player,
+                plugin.setShatter(player,
                                 (plugin.shatterMode(player) ? false : true));
                 cs.sendMessage(ChatColor.AQUA + "PixlShatter "
                                + (plugin.shatterMode(player)
