@@ -87,6 +87,23 @@ public class PixlCommand implements CommandExecutor {
                 cs.sendMessage(ChatColor.AQUA + "PixlBreak "
                                + (plugin.breakMode(player)
                                                ? "Enabled" : "Disabled"));
+                if (plugin.shatterMode(player) && !plugin.breakMode(player)) {
+                    plugin.setShatter(player, false);
+                    cs.sendMessage(ChatColor.AQUA + "PixlShatter was also disabled");
+                }
+                return true;
+            } else if (args[0].equalsIgnoreCase("shatter")) {
+                if (!player.hasPermission("pixl.break")) {
+                    cs.sendMessage(ChatColor.RED + "You do not have permission "
+                                   + "to use this command.");
+                    return true;
+                }
+
+                plugin.setBreak(player,
+                                (plugin.shatterMode(player) ? false : true));
+                cs.sendMessage(ChatColor.AQUA + "PixlShatter "
+                               + (plugin.shatterMode(player)
+                                               ? "Enabled" : "Disabled"));
                 return true;
             } else if (args[0].equalsIgnoreCase("clear")) {
                 if (!player.hasPermission("pixl.toggle")) {

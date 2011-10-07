@@ -15,6 +15,7 @@ public class Pixl extends JavaPlugin {
     public HashMap<Player, Boolean> toggled = new HashMap<Player, Boolean>();
     public HashMap<Player, Integer> set = new HashMap<Player, Integer>();
     public HashMap<Player, Boolean> breakMode = new HashMap<Player, Boolean>();
+    public HashMap<Player, Boolean> shatterMode = new HashMap<Player, Boolean>();
 
     private final PixlPlayer pListener = new PixlPlayer(this);
     private final PixlBlock bListener = new PixlBlock(this);
@@ -22,14 +23,14 @@ public class Pixl extends JavaPlugin {
     // The list of materials that can be PixlBroken by limited PixlBreak users.
     public final Material[] limitedUserMaterials = {
          // Stairs
-         Material.WOOD_STAIRS, Material.COBBLESTONE_STAIRS,
+         Material.WOOD_STAIRS, Material.COBBLESTONE_STAIRS, Material.SMOOTH_STAIRS, Material.BRICK_STAIRS,
 
          // Ores
          Material.COAL_ORE, Material.IRON_ORE, Material.GOLD_ORE,
          Material.DIAMOND_ORE, Material.LAPIS_ORE,
 
          // Other hard-to-break stuff.
-         Material.OBSIDIAN, Material.WEB, Material.BRICK, Material.FENCE
+         Material.OBSIDIAN, Material.WEB, Material.BRICK, Material.FENCE, Material.IRON_FENCE, Material.SMOOTH_BRICK
     };
 
     // The list of materials that count as pickaxes for PixlBreak.
@@ -37,9 +38,11 @@ public class Pixl extends JavaPlugin {
         Material.WOOD_PICKAXE, Material.STONE_PICKAXE, Material.IRON_PICKAXE,
         Material.GOLD_PICKAXE, Material.DIAMOND_PICKAXE
     };
-
-    //Help
-    //public boolean helpEnabled = false; //enabled boolean
+    
+    //The List of materials that have special case drops
+    public final Material[] specialCaseMaterials = {
+	Material.GLASS, Material.GLOWSTONE    
+    };
 
     public void onEnable() {
 
@@ -57,7 +60,12 @@ public class Pixl extends JavaPlugin {
         getCommand("pixl").setExecutor(new PixlCommand(this));
     }
 
-    public void onDisable() { }
+    public void onDisable() {
+	toggled     = null;
+	set         = null;
+	breakMode   = null;
+	shatterMode = null;
+    }
 
     public void setToggle(final Player p, final boolean v) { toggled.put(p, v); }
     public boolean isToggled(final Player p) {
@@ -68,6 +76,12 @@ public class Pixl extends JavaPlugin {
     public void setBreak(final Player p, final boolean v) { breakMode.put(p, v); }
     public boolean breakMode(final Player p) {
         if(breakMode.containsKey(p)) { return breakMode.get(p); }
+        else { return false; }
+    }
+    
+    public void setShatter(final Player p, final boolean v) { shatterMode.put(p, v); }
+    public boolean shatterMode(final Player p) {
+        if(shatterMode.containsKey(p)) { return shatterMode.get(p); }
         else { return false; }
     }
 

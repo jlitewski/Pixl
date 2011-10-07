@@ -1,6 +1,6 @@
 name: Pixl
 main: com.hackhalo2.creative.Pixl
-version: 1.7.3
+version: 1.8.1
 author: HACKhalo2
 commands:
     pixl:
@@ -10,6 +10,7 @@ commands:
         example: /<command> | Toggle PixlArt on/off
         example: /<command> help | Help Menu
         example: /<command> break | Toggle PixlBreak on/off
+        example: /<command> shatter | Toggle PixlShatter on/off
         example: /<command> set <value> | hard-set the byte value
         example: /<command> clear | clear the value set by the set command
 permissions:
@@ -26,6 +27,6 @@ permissions:
     pixl.toggle:
         description: Allows the player to use PixlToggle.
     pixl.break:
-        description: Allows the player to use PixlBreak.
+        description: Allows the player to use PixlBreak and PixlShatter.
     pixl.break.limited:
-        description: Restricts the player's use of PixkBreak to hard-to-break materials like obsidian.
+        description: Restricts the player's use of PixlBreak and PixlShatter to hard-to-break materials like obsidian.
