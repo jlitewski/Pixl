@@ -1,5 +1,6 @@
 package com.hackhalo2.creative;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -20,8 +21,8 @@ public class PixlBlock extends BlockListener {
 	if (block.getType() == Material.BEDROCK) {
 	    // Can't break bedrock with PixlBreak.
 	    return;
-	} else if (!plugin.breakMode(player)) {
-	    // PixlBreak isn't active for this player.
+	} else if (!plugin.breakMode(player) || !plugin.shatterMode(player)) {
+	    // PixlBreak or PixlShatter isn't active for this player.
 	    return;
 	} else if (!plugin.isPickaxe(player.getItemInHand().getType())) {
 	    // The player isn't holding a pick.
@@ -47,7 +48,8 @@ public class PixlBlock extends BlockListener {
 		if(plugin.shatterMode(player)) {
 		    e.getBlock().setType(Material.AIR);
 		} else {
-		    e.getBlock().getWorld().dropItemNaturally(e.getBlock().getLocation(), new ItemStack(available));
+		    Bukkit.getWorld(e.getBlock().getWorld().getName()).dropItemNaturally(e.getBlock().getLocation(), new ItemStack(available));
+		    e.getBlock().setType(Material.AIR);
 		}
 		return;
 	    }

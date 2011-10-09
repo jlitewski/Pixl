@@ -58,6 +58,7 @@ public class PixlPlayer extends PlayerListener {
 	if(event1.isCancelled()) {
 	    return;
 	} else {
+	    //switch statement later on?
 	    Block previousBlock = b;
 	    if(a.Type(b) == Material.LOG || a.Type(b) == Material.LEAVES) {
 		if(b.getData() < (byte)(2)) { b.setData((byte)(b.getData()+1)); } //add one

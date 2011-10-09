@@ -27,7 +27,7 @@ public class Pixl extends JavaPlugin {
 
          // Ores
          Material.COAL_ORE, Material.IRON_ORE, Material.GOLD_ORE,
-         Material.DIAMOND_ORE, Material.LAPIS_ORE,
+         Material.DIAMOND_ORE, Material.LAPIS_ORE, Material.REDSTONE_ORE,
 
          // Other hard-to-break stuff.
          Material.OBSIDIAN, Material.WEB, Material.BRICK, Material.FENCE, Material.IRON_FENCE, Material.SMOOTH_BRICK
@@ -93,7 +93,7 @@ public class Pixl extends JavaPlugin {
     }
 
     public boolean checkPermissions(Player p, String s, boolean f) {
-        if(isToggled(p) || breakMode(p) || f) { //check to see if player is toggled or forced
+        if(isToggled(p) || breakMode(p) || shatterMode(p) || f) { //check to see if player is toggled or forced
             return p.hasPermission(s);
         }
         return false;
