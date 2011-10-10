@@ -97,6 +97,8 @@ public class PixlCommand implements CommandExecutor {
                     cs.sendMessage(ChatColor.RED + "You do not have permission "
                                    + "to use this command.");
                     return true;
+                } else if(!plugin.breakMode(player)) {
+                    cs.sendMessage(ChatColor.RED + "PixlBreak isn't enabled. Please enable it before enabling PixlShatter.");
                 }
 
                 plugin.setShatter(player,
