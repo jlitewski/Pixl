@@ -3,8 +3,13 @@ package com.hackhalo2.creative;
 import java.util.HashMap;
 
 import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -107,5 +112,13 @@ public class Pixl extends JavaPlugin {
         }
 
         return false;
+    }
+    
+    public void logBlockPlace(Block a, BlockState b, Block c, ItemStack d, Player e, boolean f) {
+	this.getServer().getPluginManager().callEvent(new BlockPlaceEvent(a, b, c, d, e, f));
+    }
+    
+    public void logBlockBreak(Block a, Player b) {
+	this.getServer().getPluginManager().callEvent(new BlockBreakEvent(a, b));
     }
 }

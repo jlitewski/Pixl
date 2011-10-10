@@ -5,7 +5,6 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerListener;
@@ -95,8 +94,7 @@ public class PixlPlayer extends PlayerListener {
 		if(b.getData() < (byte)(2)) { b.setData((byte)(b.getData()+1)); } //add one
 		else { b.setData((byte)(0)); } //reset it
 	    }
-	    BlockPlaceEvent event2 = new BlockPlaceEvent(b, previousBlock.getState(), previousBlock, p.getItemInHand(), p, true);
-	    plugin.getServer().getPluginManager().callEvent(event2);
+	    plugin.logBlockPlace(b, previousBlock.getState(), previousBlock, p.getItemInHand(), p, true);
 	}
     }
 }

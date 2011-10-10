@@ -45,6 +45,7 @@ public class PixlBlock extends BlockListener {
 	// Check for special case blocks
 	for (Material available : plugin.specialCaseMaterials) {
 	    if (available.equals(type)) {
+		plugin.logBlockBreak(e.getBlock(), e.getPlayer()); //record the broken block
 		if(plugin.shatterMode(player)) {
 		    e.getBlock().setType(Material.AIR);
 		} else {
@@ -58,6 +59,7 @@ public class PixlBlock extends BlockListener {
 	// If the player has appropriate permissions, instabreak the block.
 	if (limited_ok || !player.hasPermission("pixl.break.limited")) {
 	    if(plugin.shatterMode(player)) {
+		plugin.logBlockBreak(e.getBlock(), e.getPlayer()); //record the broken block
 		e.getBlock().setType(Material.AIR);
 	    } else {
 		e.setInstaBreak(true);
