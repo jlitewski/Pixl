@@ -1,5 +1,6 @@
 package com.hackhalo2.creative;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.bukkit.Material;
@@ -13,6 +14,10 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import com.hackhalo2.creative.pixlable.CustomPixlable;
+import com.hackhalo2.creative.pixlable.PixlableBlock;
+import com.hackhalo2.creative.pixlable.PixlableStairs;
 
 public class Pixl extends JavaPlugin {
     public PluginDescriptionFile pdf;
@@ -38,16 +43,27 @@ public class Pixl extends JavaPlugin {
          Material.OBSIDIAN, Material.WEB, Material.BRICK, Material.FENCE, Material.IRON_FENCE, Material.SMOOTH_BRICK
     };
 
-    // The list of materials that count as pickaxes for PixlBreak.
+    // The list of materials that count as pickaxes for PixlBreak and PixlShatter.
     public final Material[] pickaxeMaterials = {
         Material.WOOD_PICKAXE, Material.STONE_PICKAXE, Material.IRON_PICKAXE,
         Material.GOLD_PICKAXE, Material.DIAMOND_PICKAXE
     };
     
+    // The list of materials that count as shovels for PixlBreak or PixlShatter.
+    public final Material[] shovelMaterials = {
+	Material.WOOD_SPADE, Material.STONE_SPADE, Material.IRON_SPADE,
+	Material.GOLD_SPADE, Material.DIAMOND_SPADE
+    };
+    
     //The List of materials that have special case drops
     public final Material[] specialCaseMaterials = {
-	Material.GLASS, Material.GLOWSTONE    
+	Material.GLASS, Material.GLOWSTONE
     };
+    
+    //The Custom blocks plugins define
+    public static ArrayList<PixlableBlock> pixlableBlocks;
+    public static ArrayList<PixlableStairs> pixlableStairs;
+    public static ArrayList<CustomPixlable> customBlocks;
 
     public void onEnable() {
 
@@ -114,11 +130,23 @@ public class Pixl extends JavaPlugin {
         return false;
     }
     
+    public boolean isSpade(Material material) {
+	for (Material spade : shovelMaterials) {
+	    if (spade.equals(material)) {
+		return true;
+	    }
+	}
+	
+	return false;
+    }
+    
     public void logBlockPlace(Block a, BlockState b, Block c, ItemStack d, Player e, boolean f) {
 	this.getServer().getPluginManager().callEvent(new BlockPlaceEvent(a, b, c, d, e, f));
     }
     
-    public void logBlockBreak(Block a, Player b) {
-	this.getServer().getPluginManager().callEvent(new BlockBreakEvent(a, b));
+    public boolean logBlockBreak(Block a, Player b) {
+	BlockBreakEvent e = new BlockBreakEvent(a, b);
+	this.getServer().getPluginManager().callEvent(e);
+	return e.isCancelled();
     }
 }

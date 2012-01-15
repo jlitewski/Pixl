@@ -11,7 +11,7 @@ import org.bukkit.event.player.PlayerListener;
 
 public class PixlPlayer extends PlayerListener {
     public class helper {
-	private final int[] supported = new int[] { 4, 6, 17, 18, 19, 31, 33, 35, 43, 44, 48, 53, 67, 85, 98, 108, 109, 114}; //Supported Block ID's
+	private final int[] supported = new int[] { 4, 6, 17, 18, 19, 31, 33, 35, 43, 44, 48, 53, 67, 78, 85, 98, 99, 100, 108, 109, 114, 118}; //Supported Block ID's
 	public helper() { }
 
 	public boolean Block(Block b) {
@@ -27,9 +27,13 @@ public class PixlPlayer extends PlayerListener {
     }
 
     private final Pixl plugin;
+    private final PixlRelay relay;
     private final helper a = new helper();
 
-    public PixlPlayer(Pixl p) { this.plugin = p; }
+    public PixlPlayer(Pixl p) {
+	this.plugin = p;
+	this.relay = new PixlRelay(p);
+    }
 
     @Override
     public void onPlayerInteract(PlayerInteractEvent e) {
@@ -59,40 +63,30 @@ public class PixlPlayer extends PlayerListener {
 	} else {
 	    //switch statement later on?
 	    Block previousBlock = b;
-	    if(a.Type(b) == Material.LOG || a.Type(b) == Material.LEAVES) {
-		if(b.getData() < (byte)(2)) { b.setData((byte)(b.getData()+1)); } //add one
-		else { b.setData((byte)(0)); } //reset it
+	    if(a.Type(b) == Material.LOG || a.Type(b) == Material.LEAVES || a.Type(b) == Material.SMOOTH_BRICK ||
+		    a.Type(b) == Material.LONG_GRASS || a.Type(b) == Material.SAPLING) {
+		relay.rotateData(b, 2);
 	    } else if(a.Type(b) == Material.WOOL) {
 		if(plugin.isSet(p) == null) {
-		    if(b.getData() < (byte)(15)) { b.setData((byte)(b.getData()+1)); } //add one
-		    else { b.setData((byte)(0)); } //reset it
-		} else { b.setData(plugin.isSet(p).byteValue()); } //should set the byte value...
+		    relay.rotateData(b, 15);
+		} else { relay.rotateData(b, 15, plugin.isSet(p)); }
 	    } else if(a.Type(b) == Material.STEP || a.Type(b) == Material.DOUBLE_STEP) {
-		if(b.getData() < (byte)(5)) { b.setData((byte)(b.getData()+1)); } //add one
-		else { b.setData((byte)(0)); } //reset it
+		relay.rotateData(b, 5);
 	    } else if(a.Type(b) == Material.WOOD_STAIRS || a.Type(b) == Material.COBBLESTONE_STAIRS ||
 		    a.Type(b) == Material.BRICK_STAIRS || a.Type(b) == Material.SMOOTH_STAIRS || a.ID(b) == 114) {
-		if(b.getData() == (byte)(0)) { //Ascending south
-		    b.setData((byte)(2)); //Ascending west
-		} else if(b.getData() == (byte)(1)) { //Ascending north
-		    b.setData((byte)(3)); //Ascending east
-		} else if(b.getData() == (byte)(2)) { //Ascending west
-		    b.setData((byte)(1)); //Ascending north
-		} else if(b.getData() == (byte)(3)) { //Ascending east
-		    b.setData((byte)(0)); //Ascending south
-		}
-	    } else if(a.Type(b) == Material.SMOOTH_BRICK) {
-		if(b.getData() < (byte)(2)) { b.setData((byte)(b.getData()+1)); } //add one
-		else { b.setData((byte)(0)); } //reset it
+		relay.rotateStairs(b);
 	    } else if(a.Type(b) == Material.SPONGE || a.Type(b) == Material.FENCE) { //Turn Sponges into fences and back again!
 		if(a.Type(b) == Material.SPONGE) { b.setType(Material.FENCE); }
 		else if(a.Type(b) == Material.FENCE) { b.setType(Material.SPONGE); }
 	    } else if(a.Type(b) == Material.COBBLESTONE || a.Type(b) == Material.MOSSY_COBBLESTONE) { //Turn Cobble into mossy and back again!
 		if(a.Type(b) == Material.COBBLESTONE) { b.setType(Material.MOSSY_COBBLESTONE); }
 		else if(a.Type(b) == Material.MOSSY_COBBLESTONE) { b.setType(Material.COBBLESTONE); }
-	    } else if(a.Type(b) == Material.LONG_GRASS || a.Type(b) == Material.SAPLING) {
-		if(b.getData() < (byte)(2)) { b.setData((byte)(b.getData()+1)); } //add one
-		else { b.setData((byte)(0)); } //reset it
+	    } else if(a.Type(b) == Material.HUGE_MUSHROOM_1 || a.Type(b) == Material.HUGE_MUSHROOM_2) {
+		relay.rotateData(b, 10);
+	    } else if(a.Type(b) == Material.SNOW) {
+		relay.rotateData(b, 7);
+	    } else if(a.Type(b) == Material.CAULDRON) {
+		relay.rotateData(b, 3);
 	    }
 	    plugin.logBlockPlace(b, previousBlock.getState(), previousBlock, p.getItemInHand(), p, true);
 	}

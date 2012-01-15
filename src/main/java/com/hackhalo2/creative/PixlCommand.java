@@ -77,50 +77,33 @@ public class PixlCommand implements CommandExecutor {
                 return true;
             } else if (args[0].equalsIgnoreCase("break")) {
                 if (!player.hasPermission("pixl.break")) {
-                    cs.sendMessage(ChatColor.RED + "You do not have permission "
-                                   + "to use this command.");
+                    cs.sendMessage(ChatColor.RED + "You do not have permission to use this command.");
                     return true;
                 }
 
-                plugin.setBreak(player,
-                                (plugin.breakMode(player) ? false : true));
-                cs.sendMessage(ChatColor.AQUA + "PixlBreak "
-                               + (plugin.breakMode(player)
-                                               ? "Enabled" : "Disabled"));
-                if (plugin.shatterMode(player) && !plugin.breakMode(player)) {
-                    plugin.setShatter(player, false);
-                    cs.sendMessage(ChatColor.AQUA + "PixlShatter was also disabled");
-                }
+                plugin.setBreak(player, (plugin.breakMode(player) ? false : true));
+                cs.sendMessage(ChatColor.AQUA + "PixlBreak " + (plugin.breakMode(player) ? "Enabled" : "Disabled"));
                 return true;
             } else if (args[0].equalsIgnoreCase("shatter")) {
                 if (!player.hasPermission("pixl.break")) {
-                    cs.sendMessage(ChatColor.RED + "You do not have permission "
-                                   + "to use this command.");
+                    cs.sendMessage(ChatColor.RED + "You do not have permission to use this command.");
                     return true;
-                } else if(!plugin.breakMode(player)) {
-                    cs.sendMessage(ChatColor.RED + "PixlBreak isn't enabled. Please enable it before enabling PixlShatter.");
                 }
 
-                plugin.setShatter(player,
-                                (plugin.shatterMode(player) ? false : true));
-                cs.sendMessage(ChatColor.AQUA + "PixlShatter "
-                               + (plugin.shatterMode(player)
-                                               ? "Enabled" : "Disabled"));
+                plugin.setShatter(player, (plugin.shatterMode(player) ? false : true));
+                cs.sendMessage(ChatColor.AQUA + "PixlShatter " + (plugin.shatterMode(player) ? "Enabled" : "Disabled"));
                 return true;
             } else if (args[0].equalsIgnoreCase("clear")) {
                 if (!player.hasPermission("pixl.toggle")) {
-                    cs.sendMessage(ChatColor.RED + "You do not have permission "
-                                   + "to use this command.");
+                    cs.sendMessage(ChatColor.RED + "You do not have permission to use this command.");
                     return true;
                 }
 
                 if (plugin.isSet(player) != null) {
                     plugin.removeValue(player);
-                    player.sendMessage(ChatColor.AQUA
-                                       + "Hard value cleared.");
+                    player.sendMessage(ChatColor.AQUA + "Hard value cleared.");
                 } else {
-                    player.sendMessage(ChatColor.AQUA
-                                       + "You do not have a hard value set.");
+                    player.sendMessage(ChatColor.AQUA + "You do not have a hard value set.");
                 }
 
                 return true;
@@ -128,8 +111,7 @@ public class PixlCommand implements CommandExecutor {
         } else if (args.length == 2) {
             if (args[0].equalsIgnoreCase("set")) {
                 if (!player.hasPermission("pixl.toggle")) {
-                    cs.sendMessage(ChatColor.RED + "You do not have permission "
-                                   + "to use this command.");
+                    cs.sendMessage(ChatColor.RED + "You do not have permission to use this command.");
                     return true;
                 }
 
@@ -137,8 +119,7 @@ public class PixlCommand implements CommandExecutor {
                     int raw_value = Integer.parseInt(args[1].trim());
                     int value = Math.max(0,  Math.min(15, raw_value));
                     plugin.setValue(player, value);
-                    cs.sendMessage(ChatColor.AQUA + "Hard value set to "
-                                   + wool[value] + ".");
+                    cs.sendMessage(ChatColor.AQUA + "Hard value set to " + wool[value] + ".");
                     return true;
                 } catch(NumberFormatException e) {
                     String names = "";
@@ -146,8 +127,7 @@ public class PixlCommand implements CommandExecutor {
                     for (int i=0; i < wool.length; i++) {
                         if (args[1].equalsIgnoreCase(wool[i])) {
                             plugin.setValue(player, i);
-                            cs.sendMessage(ChatColor.AQUA + "Hard value set to "
-                                           + wool[i] + ".");
+                            cs.sendMessage(ChatColor.AQUA + "Hard value set to " + wool[i] + ".");
                             return true;
                         }
 
@@ -157,8 +137,7 @@ public class PixlCommand implements CommandExecutor {
                     cs.sendMessage(ChatColor.RED + "I don't know that color.");
                     cs.sendMessage(ChatColor.AQUA + "Valid color names:");
                     cs.sendMessage(ChatColor.AQUA + names);
-                    cs.sendMessage(ChatColor.AQUA + "(You can also specify the "
-                                   + "color's data value, if you know it.)");
+                    cs.sendMessage(ChatColor.AQUA + "(You can also specify the color's data value, if you know it.)");
                     return true;
                 }
             }
