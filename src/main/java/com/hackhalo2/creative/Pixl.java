@@ -1,6 +1,5 @@
 package com.hackhalo2.creative;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.bukkit.Material;
@@ -15,10 +14,6 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.hackhalo2.creative.pixlable.CustomPixlable;
-import com.hackhalo2.creative.pixlable.PixlableBlock;
-import com.hackhalo2.creative.pixlable.PixlableStairs;
-
 public class Pixl extends JavaPlugin {
     public PluginDescriptionFile pdf;
     public String version = null;
@@ -29,6 +24,7 @@ public class Pixl extends JavaPlugin {
 
     private final PixlPlayer pListener = new PixlPlayer(this);
     private final PixlBlock bListener = new PixlBlock(this);
+    private final PixlListener listener = new PixlListener(this);
 
     // The list of materials that can be PixlBroken by limited PixlBreak users.
     public final Material[] limitedUserMaterials = {
@@ -59,11 +55,6 @@ public class Pixl extends JavaPlugin {
     public final Material[] specialCaseMaterials = {
 	Material.GLASS, Material.GLOWSTONE
     };
-    
-    //The Custom blocks plugins define
-    public static ArrayList<PixlableBlock> pixlableBlocks;
-    public static ArrayList<PixlableStairs> pixlableStairs;
-    public static ArrayList<CustomPixlable> customBlocks;
 
     public void onEnable() {
 
@@ -76,6 +67,7 @@ public class Pixl extends JavaPlugin {
         pm.registerEvent(Event.Type.PLAYER_KICK, pListener, Event.Priority.Normal, this);
         pm.registerEvent(Event.Type.PLAYER_INTERACT, pListener, Event.Priority.Normal, this);
         pm.registerEvent(Event.Type.BLOCK_DAMAGE, bListener, Event.Priority.Normal, this);
+        pm.registerEvents(listener, this); //new Event system
         System.out.println("[Pixl] "+version+" Loaded");
 
         getCommand("pixl").setExecutor(new PixlCommand(this));

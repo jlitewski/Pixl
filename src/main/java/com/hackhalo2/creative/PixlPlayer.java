@@ -8,7 +8,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerListener;
-
+@Deprecated
 public class PixlPlayer extends PlayerListener {
     public class helper {
 	private final int[] supported = new int[] { 4, 6, 17, 18, 19, 31, 33, 35, 43, 44, 48, 53, 67, 78, 85, 98, 99, 100, 108, 109, 114, 118}; //Supported Block ID's
@@ -32,7 +32,7 @@ public class PixlPlayer extends PlayerListener {
 
     public PixlPlayer(Pixl p) {
 	this.plugin = p;
-	this.relay = new PixlRelay(p);
+	this.relay = new PixlRelay();
     }
 
     @Override
