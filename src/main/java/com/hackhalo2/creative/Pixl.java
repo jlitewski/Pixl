@@ -6,7 +6,6 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
@@ -17,13 +16,18 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class Pixl extends JavaPlugin {
     public PluginDescriptionFile pdf;
     public String version = null;
+    
+    //Most likely getting rid of these in favor of the YAML files
     public HashMap<Player, Boolean> toggled = new HashMap<Player, Boolean>();
     public HashMap<Player, Integer> set = new HashMap<Player, Integer>();
     public HashMap<Player, Boolean> breakMode = new HashMap<Player, Boolean>();
     public HashMap<Player, Boolean> shatterMode = new HashMap<Player, Boolean>();
+    
+    //YAML stuff
+    
 
-    private final PixlPlayer pListener = new PixlPlayer(this);
-    private final PixlBlock bListener = new PixlBlock(this);
+    //private final PixlPlayer pListener = new PixlPlayer(this);
+    //private final PixlBlock bListener = new PixlBlock(this);
     private final PixlListener listener = new PixlListener(this);
 
     // The list of materials that can be PixlBroken by limited PixlBreak users.
@@ -63,10 +67,10 @@ public class Pixl extends JavaPlugin {
         //Set up the Plugin Manager
         PluginManager pm = getServer().getPluginManager();
         //Register Listeners
-        pm.registerEvent(Event.Type.PLAYER_JOIN, pListener, Event.Priority.Normal, this);
-        pm.registerEvent(Event.Type.PLAYER_KICK, pListener, Event.Priority.Normal, this);
-        pm.registerEvent(Event.Type.PLAYER_INTERACT, pListener, Event.Priority.Normal, this);
-        pm.registerEvent(Event.Type.BLOCK_DAMAGE, bListener, Event.Priority.Normal, this);
+        //pm.registerEvent(Event.Type.PLAYER_JOIN, pListener, Event.Priority.Normal, this);
+        //pm.registerEvent(Event.Type.PLAYER_KICK, pListener, Event.Priority.Normal, this);
+        //pm.registerEvent(Event.Type.PLAYER_INTERACT, pListener, Event.Priority.Normal, this);
+        //pm.registerEvent(Event.Type.BLOCK_DAMAGE, bListener, Event.Priority.Normal, this);
         pm.registerEvents(listener, this); //new Event system
         System.out.println("[Pixl] "+version+" Loaded");
 
@@ -79,27 +83,32 @@ public class Pixl extends JavaPlugin {
 	breakMode   = null;
 	shatterMode = null;
     }
-
+    @Deprecated
     public void setToggle(final Player p, final boolean v) { toggled.put(p, v); }
+    @Deprecated
     public boolean isToggled(final Player p) {
         if(toggled.containsKey(p)) { return toggled.get(p); }
         else { return false; }
     }
-
+    @Deprecated
     public void setBreak(final Player p, final boolean v) { breakMode.put(p, v); }
+    @Deprecated
     public boolean breakMode(final Player p) {
         if(breakMode.containsKey(p)) { return breakMode.get(p); }
         else { return false; }
     }
-    
+    @Deprecated
     public void setShatter(final Player p, final boolean v) { shatterMode.put(p, v); }
+    @Deprecated
     public boolean shatterMode(final Player p) {
         if(shatterMode.containsKey(p)) { return shatterMode.get(p); }
         else { return false; }
     }
-
+    @Deprecated
     public void removeValue(final Player p) { set.remove(p); }
+    @Deprecated
     public void setValue(final Player p, final int v) { set.put(p, v); }
+    @Deprecated
     public Integer isSet(final Player p) {
         if(set.containsKey(p)) { return set.get(p); }
         else { return null; }
@@ -139,6 +148,6 @@ public class Pixl extends JavaPlugin {
     public boolean logBlockBreak(Block a, Player b) {
 	BlockBreakEvent e = new BlockBreakEvent(a, b);
 	this.getServer().getPluginManager().callEvent(e);
-	return e.isCancelled();
+	return !(e.isCancelled()); //Make sure to reverse this so true = can break
     }
 }
