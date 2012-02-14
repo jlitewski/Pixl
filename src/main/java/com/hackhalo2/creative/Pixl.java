@@ -1,6 +1,6 @@
 package com.hackhalo2.creative;
 
-import java.util.HashMap;
+import java.io.File;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -17,18 +17,12 @@ public class Pixl extends JavaPlugin {
     public PluginDescriptionFile pdf;
     public String version = null;
     
-    //Most likely getting rid of these in favor of the YAML files
-    public HashMap<Player, Boolean> toggled = new HashMap<Player, Boolean>();
-    public HashMap<Player, Integer> set = new HashMap<Player, Integer>();
-    public HashMap<Player, Boolean> breakMode = new HashMap<Player, Boolean>();
-    public HashMap<Player, Boolean> shatterMode = new HashMap<Player, Boolean>();
-    
     //YAML stuff
-    
+    File configData = new File(this.getDataFolder(), "playerdata"); //The Player Data Directory
 
-    //private final PixlPlayer pListener = new PixlPlayer(this);
-    //private final PixlBlock bListener = new PixlBlock(this);
     private final PixlListener listener = new PixlListener(this);
+    
+    //TODO: Replace ALL the things for the new Configuration stuffs
 
     // The list of materials that can be PixlBroken by limited PixlBreak users.
     public final Material[] limitedUserMaterials = {
@@ -59,6 +53,14 @@ public class Pixl extends JavaPlugin {
     public final Material[] specialCaseMaterials = {
 	Material.GLASS, Material.GLOWSTONE
     };
+    
+    @Override
+    public void onLoad() {
+	//Set up the directories Pixl needs
+	configData.mkdirs();
+	//TODO: Query and load the GIST into memory, defaulting to built in if it's unaccessible.
+	//TODO: Overload the Loaded GIST with local stuff, if enabled
+    }
 
     public void onEnable() {
 
@@ -66,59 +68,14 @@ public class Pixl extends JavaPlugin {
         version = pdf.getVersion();
         //Set up the Plugin Manager
         PluginManager pm = getServer().getPluginManager();
-        //Register Listeners
-        //pm.registerEvent(Event.Type.PLAYER_JOIN, pListener, Event.Priority.Normal, this);
-        //pm.registerEvent(Event.Type.PLAYER_KICK, pListener, Event.Priority.Normal, this);
-        //pm.registerEvent(Event.Type.PLAYER_INTERACT, pListener, Event.Priority.Normal, this);
-        //pm.registerEvent(Event.Type.BLOCK_DAMAGE, bListener, Event.Priority.Normal, this);
-        pm.registerEvents(listener, this); //new Event system
+        pm.registerEvents(listener, this); //new Event system handler
         System.out.println("[Pixl] "+version+" Loaded");
 
         getCommand("pixl").setExecutor(new PixlCommand(this));
     }
 
     public void onDisable() {
-	toggled     = null;
-	set         = null;
-	breakMode   = null;
-	shatterMode = null;
-    }
-    @Deprecated
-    public void setToggle(final Player p, final boolean v) { toggled.put(p, v); }
-    @Deprecated
-    public boolean isToggled(final Player p) {
-        if(toggled.containsKey(p)) { return toggled.get(p); }
-        else { return false; }
-    }
-    @Deprecated
-    public void setBreak(final Player p, final boolean v) { breakMode.put(p, v); }
-    @Deprecated
-    public boolean breakMode(final Player p) {
-        if(breakMode.containsKey(p)) { return breakMode.get(p); }
-        else { return false; }
-    }
-    @Deprecated
-    public void setShatter(final Player p, final boolean v) { shatterMode.put(p, v); }
-    @Deprecated
-    public boolean shatterMode(final Player p) {
-        if(shatterMode.containsKey(p)) { return shatterMode.get(p); }
-        else { return false; }
-    }
-    @Deprecated
-    public void removeValue(final Player p) { set.remove(p); }
-    @Deprecated
-    public void setValue(final Player p, final int v) { set.put(p, v); }
-    @Deprecated
-    public Integer isSet(final Player p) {
-        if(set.containsKey(p)) { return set.get(p); }
-        else { return null; }
-    }
-
-    public boolean checkPermissions(Player p, String s, boolean f) {
-        if(isToggled(p) || breakMode(p) || shatterMode(p) || f) { //check to see if player is toggled or forced
-            return p.hasPermission(s);
-        }
-        return false;
+	
     }
 
     public boolean isPickaxe(Material material) {

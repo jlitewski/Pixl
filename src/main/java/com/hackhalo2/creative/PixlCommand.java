@@ -6,6 +6,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+//TODO: Freaking fix this
+//XXX: Maybe have all the commands separate?
 public class PixlCommand implements CommandExecutor {
     private final String[] wool = { "white", "orange", "magenta", "lightblue", "yellow", "lightgreen", "pink",
             "gray", "lightgray", "cyan", "purple", "blue", "brown", "green", "red", "black"};

@@ -7,6 +7,7 @@ import org.bukkit.event.block.BlockDamageEvent;
 import org.bukkit.event.block.BlockListener;
 import org.bukkit.inventory.ItemStack;
 @Deprecated
+//TODO: Find a new use for this, or delete it
 public class PixlBlock extends BlockListener {
     private final Pixl plugin;
 

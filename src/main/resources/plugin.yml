@@ -1,6 +1,6 @@
 name: Pixl
 main: com.hackhalo2.creative.Pixl
-version: 1.8.1
+version: 2.0 Alpha
 author: HACKhalo2
 commands:
     pixl:
